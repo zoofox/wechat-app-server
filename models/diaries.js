@@ -11,10 +11,12 @@ class diaries{
 			disagree:[],
 			reviews:[],
 			averageScore:100,
-			weather:'风和日丽',
+			weather:0,
 			diaryName:'',
 			content:'',
-			hugs:[]
+			hugs:[],//鲜花数量
+			commentsCount:0,
+			isPublic:1
 		},article);
 	}
 
