@@ -29,7 +29,7 @@ class users{
 		 	}
 		 	var collection = db.collection('diaryUsers');
 		 	console.log('---------------------');
-		 	console.log(self.user);
+		 	// console.log(self.user);
 		 	collection.insertOne(self.user,{safe:true},function(err,doc){
 		 			if(err){
 		 				return callback(err);
@@ -68,10 +68,10 @@ class users{
 		 	if(updateInfo&&typeof updateInfo === 'object'){
 		 		collection.updateOne({openId:openId}, {$set:updateInfo},function(err, doc) {
 			 			if(err){
-			 				console.log(err)
+			 				// console.log(err)
 			 				return callback(err);
 			 			}
-			 			console.log(doc)
+			 			// console.log(doc)
 			 			return callback(null,doc);
 			 	})
 		 	}else{

@@ -29,6 +29,7 @@ router.post('/list',(req,res,next)=>{
 			async.mapLimit(docs,THREAD_NUM,(doc,callback)=>{
 				Users.getUser(doc.openId,(err,user)=>{
 					doc.user = user;
+					doc.content = doc.content.length > 64?doc.content.slice(0,64)+'...':doc.content;
 					articles.push(doc);
 					callback(null);
 				})
@@ -51,23 +52,33 @@ router.post('/list',(req,res,next)=>{
 			// content:''
 
 router.post('/save',(req,res,next)=>{
+	console.log('save diary')
 	let openId = req.body.openId;
-	let content = escapeString(req.body.content);
-	let weather = escapeString(req.body.weather);
-	let diaryName = escapeString(req.body.diaryName);
+	let content = req.body.content;
+	let weather = req.body.weather;
+	let diaryName = req.body.title;//title
+	let isPublic = req.body.isPublic;
 	
-	new Diaries({
-		openId:openId,
-		content:content,
-		weather:weather,
-		diaryName:diaryName
-	}).save((err)=>{
-		if(err){
-			res.send({code:1,msg:err})
-		}else{
-			res.send({code:0,msg:''})
-		}
-	})
+	if(openId&&content&&diaryName){
+		new Diaries({
+			openId:openId,
+			content:content,
+			weather:weather,
+			diaryName:diaryName,
+			isPublic:isPublic
+		}).save((err)=>{
+			if(err){
+				console.error('1')
+				res.send({code:1,msg:err})
+			}else{
+				console.error('0')
+				res.send({code:0,msg:''})
+			}
+		})
+	}else{
+		res.send({code:1,msg:'提交信息不完整'})
+	}
+	
 })
 
 

@@ -4,7 +4,7 @@ var router = express.Router();
 var Comments = require('../models/comments')
 var Users = require('../models/users')
 
-const THREAD_NUM = 3;
+const THREAD_NUM = 1;
 
 router.post('/list',(req,res,next)=>{
 	let id  = req.body.id;                
@@ -43,26 +43,20 @@ router.post('/list',(req,res,next)=>{
 	})
 })
 
-			// openId:'',
-			// agree:[],
-			// disagree:[],
-			// reviews:[],
-			// averageScore:100,
-			// weather:'风和日丽',
-			// diaryName:'',
-			// content:''
 
 router.post('/save',(req,res,next)=>{
 	let openId = req.body.openId;
-	let content = escapeString(req.body.content);
-	let weather = escapeString(req.body.weather);
-	let diaryName = escapeString(req.body.diaryName);
+	let diaryId = req.body.diaryId;
+	let isReply = req.body.isReply;
+	let replyName = req.body.replyName;
+	let comment = req.body.comment;
 	
-	new Diaries({
+	new Comments({
 		openId:openId,
-		content:content,
-		weather:weather,
-		diaryName:diaryName
+		diaryId:diaryId,
+		isReply:isReply,
+		replyName:replyName,
+		comment:comment
 	}).save((err)=>{
 		if(err){
 			res.send({code:1,msg:err})

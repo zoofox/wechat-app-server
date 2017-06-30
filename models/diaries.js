@@ -9,8 +9,6 @@ class diaries{
 			openId:'',
 			agree:[],
 			disagree:[],
-			reviews:[],
-			averageScore:100,
 			weather:0,
 			diaryName:'',
 			content:'',
@@ -20,11 +18,11 @@ class diaries{
 		},article);
 	}
 
-	save(){
-	   var date = new Date();
-	   var self = this;
-       var md5 = crypto.createHash('md5');
-       this.article.id = md5.update('guji'+data.getTime()+Math.random().toFixed(2)).digest('hex');
+	save(callback){
+			 var date = new Date();
+	  		 var self = this;
+      	 	 var md5 = crypto.createHash('md5');
+       		 this.article.id = md5.update('guji'+date.getTime()+Math.random().toFixed(2)).digest('hex');
 
 		this.article.time = { 
 				date: date, 
@@ -35,30 +33,31 @@ class diaries{
 		 }
 		mongodb((err,db)=>{
 		 	if(err){
+		 		console.log(err)
 		 		return callback(err);
 		 	}
 		 	var collection = db.collection('diaries');
 		 	collection.insertOne(self.article,{safe:true},function(err,doc){
 		 			if(err){
+		 				console.log(err)
 		 				return callback(err);
 		 			}
 		 			return callback(null);
 		 		})
-
-		 	
-
 		 })
 	}
 	static getList(count,skip,callback){
+		console.log('count:'+count,'skip:'+skip)
 		mongodb((err,db)=>{
 		 	if(err){
 		 		return callback(err);
 		 	}
 		 	var collection = db.collection('diaries');
-		 	collection.find().skip(parseInt(skip)).limit(parseInt(count)).toArray(function(err,docs){
+		 	collection.find().sort({"time":-1}).skip(parseInt(skip)).limit(parseInt(count)).toArray(function(err,docs){
 		 			if(err){
 		 				return callback(err);
 		 			}
+		 			//console.log(docs)
 		 			return callback(null,docs);
 		 		})
 		 })
